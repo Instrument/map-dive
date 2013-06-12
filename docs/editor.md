@@ -38,7 +38,7 @@ When you click "save level" in the edit mode UI, a .json file will be created in
 Creating a new Level
 --------------------
 
-Here's the typical process used to make a dive course.  The recommended workflow is to start with the desired landing zone, then pick a starting location, then add gates, then add stars.  This typically results in the least amount of re-work later on in the process.  Here's a basic walkthrough of the process used to make a new dive.
+The recommended workflow is to start with the desired landing zone, then pick a starting location, then add gates, then add stars.  This typically results in the least amount of re-work later on in the process.  Here's a basic walkthrough of the process used to make a new dive.
 
 
 ### Set up the start and end point
