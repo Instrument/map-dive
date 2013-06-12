@@ -5,11 +5,13 @@ Map-Diving game for Google I/O 2013
 
 A detailed explaination of the architecture [can be found here](https://github.com/Instrument/map-dive/blob/master/docs/architecture.md "Architecture"). 
 
+Instrucitons for using the editor [can be found here](https://github.com/Instrument/map-dive/blob/master/docs/editor.md "Dive Editor"). 
+
 
 Installing Map Dive on a Liquid Galaxy
 --------------------------------------
 
-Please note, the following instructions are specific to the Liquid Galaxy hardware and software configuration.  The Map Dive game will work just fine on a single computer, but most of the UI overlay content will look really bad if the screen size is not set to 1080x1920 (HD in portrait configuration).
+Please note, the following instructions are specific to the Liquid Galaxy hardware and software configuration.  The Map Dive game will work just fine on a single computer, but most of the UI overlay content will look really bad if the screen size is not set to 1080x1920 (HD in portrait configuration).  
 
 
 Server
