@@ -3,9 +3,7 @@ map-dive
 
 Map-Diving game for Google I/O 2013
 
-[Application Architecture](https://github.com/Instrument/map-dive/blob/master/docs/architecture.md "Architecture"). 
-
-[Using the Editor](https://github.com/Instrument/map-dive/blob/master/docs/editor.md "Dive Editor"). 
+[Application Architecture](https://github.com/Instrument/map-dive/blob/master/docs/architecture.md "Architecture") | [Using the Editor](https://github.com/Instrument/map-dive/blob/master/docs/editor.md "Dive Editor")
 
 
 Installing Map Dive on a Liquid Galaxy
