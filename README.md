@@ -22,9 +22,9 @@ On the server node, pull the Github repo to your users home directory.
 `https://github.com/Instrument/map-dive.git `
 
 
-### 2) Install [node.js](http://nodejs.org/ "node.js"). 
+### 2) Install [node.js](http://nodejs.org/ "node.js") and [socket.io](http://socket.io// "socket.io")
 
-After installing node.js, use the node package manager to install the [http://socket.io/](http://socket.io// "socket.io")
+After installing node.js, install the  package in the `server` folder.
 
 	npm install socket.io
 
