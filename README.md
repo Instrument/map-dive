@@ -3,7 +3,7 @@ map-dive
 
 Map-Diving game for Google I/O 2013
 
-A detailed explaination of the architecture [can be found here](https://github.com/Instrument/google-map-dive/blob/master/docs/architecture.md "Architecture"). 
+A detailed explaination of the architecture [can be found here](https://github.com/Instrument/map-dive/blob/master/docs/architecture.md "Architecture"). 
 
 
 Installing Map Dive on a Liquid Galaxy
@@ -15,29 +15,35 @@ Please note, the following instructions are specific to the Liquid Galaxy hardwa
 Server
 ------
 
-### 1) Install node.js
-
-You will need to install node.js, and the socket.io and http-server packages.
-
-
-### 2) Get all the code
+### 1) Get all the code
 
 On the server node, pull the Github repo to your users home directory.
 
 `https://github.com/Instrument/map-dive.git `
 
 
-### 3) Keep the servers running
+### 2) Install [node.js](http://nodejs.org/ "node.js"). 
+
+After installing node.js, use the node package manager to install the [http://socket.io/](http://socket.io// "socket.io")
+
+	npm install socket.io
+
+
+### 3) Keep node.js running
 
 Create the following crontab file for your user and install it:
 
 `pgrep -f node.*server.js >/dev/null || node map-dive/server/server.js &>/dev/null &`
-`pgrep -f node.*http >/dev/null || http-server map-dive -p 8000 &>/dev/null &`
 
 Once installed the crontab should launch the servers automatically and relaunch them if they crash.
 
 
-### 4) Create the global_config.js file
+### 4) Start an HTTP server
+
+All of the content in the `map-dive` folder should be served via HTTP.  Any HTTP server will work, the content is all static.
+
+
+### 5) Create the global_config.js file
 
 Copy `common/js/global_config.js.source` to `common/js/global_config.js`
 
