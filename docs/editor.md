@@ -45,13 +45,12 @@ The recommended workflow is to start with the desired landing zone, then pick a 
 
 1. Select "EMPTY" from the course drop-down, this will load a special empty course.
 2. Enter an address, search term, or latitude/longitude in the "find location or Lat/Lng" text field and click "search" or "lat/lng".
-3. If you are happy with the result, click "Set Origin at Player" to move the starting point of the new level to the current player location.
-4. Move your player to the location that you'd like to use for the final landmark, and add a landmark, and drop-zone entity.  You can always move these later, so just get them close to where you'd like the dive to end.
-
-_now is a good time to save your work_
-
-5. Pick a name for your level and type it into the level name field, click "save level"
+3. Pick a name for your level and type it into the level name field.
+4. If you are happy with the result, click "Set Origin at Player" to move the starting point of the new level to the current player location.
+5. Move your player to the location that you'd like to use for the final landmark, and add a landmark, and drop-zone entity.  You can always move these later, so just get them close to where you'd like the dive to end.
 6. In the map view, drag the origin marker (a skinny yellow triangle) to the location where you'd like the dive to begin.  Note that when you drag the origin marker, a green circle will appear around the drop zone, this circle is just a helpful visual indicator for a good starting distance.
+
+_now is a good time to save your level_
 
 
 ### Set up the rough course
@@ -62,7 +61,7 @@ _now is a good time to save your work_
 4. As you fall, press the space bar to drop gates along your path.  Most dives include between 10 to 14 gates.
 5. Press TAB again to switch back to zero-gravity mode.
 
-_now is another good time to save your work_
+_now is good time to save your level again_
 
 
 ### Add Stars
@@ -72,6 +71,8 @@ _now is another good time to save your work_
 3. Press TAB to switch into gameplay controls.
 4. As you fly, press the space bar to drop stars. Try to keep to the path of gates you created in the previous section.
 5. Press TAB again to switch back to zero-gravity mode.
+
+_now is good time to save your level again_
 
 
 ### Refine the Course
