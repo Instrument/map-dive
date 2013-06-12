@@ -60,18 +60,16 @@ After boot, all nodes should start a fullscreen instance of Google Chrome runnin
 
 Viewports should all load chrome in full screen, and point to the viewport URL with the viewOffset value set to the correct index.  The center viewport is index zero.  For example, these three URLs are for the left, center, and right viewports.
 
-**server url**/viewport/index.html#viewOffset=1
-
-**server url**/viewport/index.html#viewOffset=0
-
-**server url**/viewport/index.html#viewOffset=-1
+	[server url]/viewport/index.html#viewOffset=1
+	[server url]/viewport/index.html#viewOffset=0
+	[server url]/viewport/index.html#viewOffset=-1
 
 
 ### Control Node
 
 The head node, typically connected to a touch-screen display podium, needs to load the following url: 
 
-**server url**/control
+	[server url]/control
 
 
 Additionally, the head node is where the XTion depth camera needs to be connected via USB, and run the motion capture software.
