@@ -77,10 +77,8 @@ Additionally, the head node is where the XTion depth camera needs to be connecte
 
 ### Motion Tracker
 
-You must include `user_tracker_linux64/Bin` from the repo in the boot image.  You may need to compile this application depending on your specific configuration.
+You will need to compile this application depending on your specific configuration, see the README file in the user tracker folder for your platform for instructions.  After building the app you should include `user_tracker_linux64/Bin` from the repo in the boot image otherwise you will have to rebuild the app whenever your reboot the system.
 
-Before making the image, in the Bin folder, the usertracker.ini file needs to be edited so that the host line matches the name of the server.
-
-Then make the boot image for the head node. At boot time, on the head node only, this should be run as root from where the Bin folder:
+Finally, make the boot image for the head node. On the head node only, you should run the user tracker from the Bin folder at boot:
 
 `sudo ./UserTracker &>/dev/null &`
