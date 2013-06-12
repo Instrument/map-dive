@@ -1,0 +1,28 @@
+Build Instructions
+------------------
+
+1) Download the OpenNI 2.1 SDK and NiTE 2.2 middleware
+
+http://www.openni.org/openni-sdk/
+http://www.openni.org/files/nite/
+
+
+2) Copy the following items into the Include folder (or update include path so they can be found by the compiler)
+
+[OpenNI files]/Include
+[OpenNI files]/Samples/BuildSystem
+
+[NiTE files]/Include
+[NiTE files]/Samples/HandViewer/NiteSampleUtilities.h
+
+
+3) Copy the following items into the Bin folder
+
+[NiTE files]/Redist/*
+[OpenNI files]/Redist/*
+
+
+4) Build the project, the result will be a command line application called UserTracker located in the Bin folder.
+
+
+Note: OpenNI2.0 and NiTE2.0 require glibc_2.14 and glibcxx_3.4.15 or higher.

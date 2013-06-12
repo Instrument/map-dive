@@ -1,0 +1,12 @@
+This version of User_Tracker is a command-line only tool.
+
+Does not require openGL or windowing system.
+
+
+This project requires the openNI 2.1 SDK and NiTE 2.2 middleware
+
+http://www.openni.org/openni-sdk/
+http://www.openni.org/files/nite/
+
+
+OpenNI2.0 and NiTE2.0 require glibc_2.14 and glibcxx_3.4.15 or higher.

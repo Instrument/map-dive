@@ -1,0 +1,28 @@
+/****
+*
+*  THIS FILE IS SPECIFIC TO THE DISPLAY AND NETWORK CONFIGURATION
+*  Don't commit changes unless you're sure of what you're doing..
+*
+*****/
+
+
+// full res is 7560 x 1920 (7 1080p screens in portrait orientation)
+
+var WEBSOCKET_SERVER_ADDRESS = "http://localhost:8800";
+
+var viewportMetrics = {
+
+	"width" 			: 1575,  // Width of each viewport
+	"height" 			: 400,   // Height of each viewport
+	
+	"FOV" 				: 22,    // Field of view
+	
+
+	"viewAngleOffset" 	: 12.3,  // Amount to offset each viewport.  
+	// You can adjust this via the control console in order to find the best fit (control 
+	// console does not update the config file, you will need to adjust this manually once 
+	// you find the best value.)
+	
+
+	"viewIndex" 		: 0  // set at run-time via URL parameter, no need to change this value
+};

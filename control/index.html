@@ -1,0 +1,241 @@
+<DOCTYPE html>
+<html>
+
+<head>
+	
+	<script src="../common/js/global_config.js"></script>
+	<script src="../common/js/globals.js"></script>
+	<script src="../common/js/easing/Easing.js"></script>
+	<script src="../common/js/three.min.js"></script>
+	<script src="sound.js"></script>
+
+	<script src="../common/js/map_style.js"></script>
+	<script src="../common/js/landmarks.js"></script>
+
+	<script type="text/javascript" src="../common/js/jquery.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script>
+
+	<!-- Game Levels -->
+	<script src="../common/levels/level.test.js"></script>
+	<script src="../common/levels/moscone_center.json"></script>
+	<script src="../common/levels/corcovado.json"></script>
+	<script src="../common/levels/viking_ship.json"></script>
+	<script src="../common/levels/st_basils.json"></script>
+	<script src="../common/levels/taj mahal.json"></script>
+	<script src="../common/levels/eiffel tower.json"></script>
+	<script src="../common/levels/burj al arab.json"></script>
+	<script src="../common/levels/pyramids.json"></script>
+	<script src="../common/levels/mt killimanjaro.json"></script>
+	<script src="../common/levels/sydney opera house.json"></script>
+	<script src="../common/levels/hobbiton.json"></script>
+	<script src="../common/levels/statue of liberty.json"></script>
+	<script src="../common/levels/burning man.json"></script>
+
+	<script src="control.js" type="text/javascript"></script>
+
+	<!-- Game state managers -->
+	<script src="gamestate.intro.js" type="text/javascript"></script>
+	<script src="gamestate.idle.js" type="text/javascript"></script>
+	<script src="gamestate.dive.js" type="text/javascript"></script>
+	<script src="gamestate.ending.js" type="text/javascript"></script>
+	<script src="gamestate.loose.js" type="text/javascript"></script>
+	<script src="gamestate.paused.js" type="text/javascript"></script>
+	<script src="gamestate.editor.js" type="text/javascript"></script>
+
+	<style>
+
+		body{
+			color:white;
+			margin:0;
+			padding:0;
+			background-color:#404040;
+		}
+
+		#map {
+			float:left;
+			width:600px;
+			height:600px;
+			margin-right:10px;
+			
+			overflow:hidden;
+		}
+
+		#debug{
+			width:500px;
+			float:left;
+			font-size:12px;
+			font-family:monospace;
+		}
+
+		#editor{
+			padding:10px;
+			display:none;
+			width:600px;
+			float:left;
+			font-size:13px;
+			font-family:sans-serif;
+			border:1px solid white;
+		}
+
+		
+
+		#debugControls {
+			position:absolute;
+			right:0px;
+			top:0px;
+			width:150px;
+			height:150px;
+			background:black;
+			overflow:hidden;
+		}
+
+		#controlValueIndicator{
+			pointer-events:none;
+			width:10px;
+			height:10px;
+			margin-left:-5px;
+			margin-top:-5px;
+			position:absolute;
+			background-color:white;
+		}
+
+		input[type=range]{
+			width:400px;
+		}
+
+
+		#touch-controls select{
+			-webkit-appearance:none;
+			display:inline-block;
+			height:60px;
+			font-size:20px;
+		}
+
+		#touch-controls input[type=button]{
+			border-radius:8px;
+			display:inline-block;
+			height:60px;
+			font-size:20px;
+			background-color:#e0e0e0;
+			-webkit-appearance:none;
+		}
+
+		#touch-controls input[type=button].active {
+			background-color:#92ed03;
+		}
+
+		#debugCanvas{
+			background-color:black;
+		}
+
+		#levelInfo fieldset {
+			border:none;
+		}
+
+		#levelInfo label {
+			float:left;
+			line-height:22px;
+		}
+
+		#levelInfo input,
+		#levelInfo select {
+			float:right;
+			width:350px;
+		}
+
+		#playerCoords{
+			float:right;
+			font-size:12px;
+			font-family:monospace;
+			text-align:right;
+		}
+
+	</style>
+</head>
+
+
+<body>
+	<div id="map"></div>
+	
+
+	<div id="debug"></div>
+	<div id="editor">
+
+		Find location or Lat/Lng: <input type="text" id="search" style="width:300px;"><input type="button" value="search" id="searchButton"> | <input type="button" value="lat/lng" id="searchLatLng"> | 
+		
+		<hr>
+
+
+		
+		<div id="levelInfo">
+			<fieldset><label>Level Name (not displayed):</label> <input type="text" id="levelName" style="width:350px;" placeholder="some kind of level"></fieldset>
+			<fieldset><label>Map Style:</label> <select id="mapStyle"></select></fieldset>
+			<fieldset><label>Landmark Object:</label> <select id="landmarkObj"></select></fieldset>
+			<hr>
+				Info text (shows up on left screen) <br>
+			<fieldset><label>Search Term:</label> <input type="text" id="searchTerm" placeholder="Something Awesome"></fieldset>
+			<fieldset><label>Formal Target Name:</label> <input type="text" id="targetName" placeholder="A Very Awesome Thing"></fieldset>
+			<fieldset><label>Target Address:</label> <input type="text" id="targetAddress" placeholder="1234 Awesome st"></fieldset>
+			<fieldset><label>Target Country:</label> <input type="text" id="targetCountry" placeholder="United States of Awesome"></fieldset>
+			<br style="clear:both"/>
+		</div>
+		<hr>
+		Global: <input type="button" value="Set Origin at Player" id="updateOrigin"> <input type="button" id="saveLevel" value="Save Level"> | <input type="button" id="moveToOrigin" value="Move Player to Origin">
+
+		<hr>
+
+		Entities: 
+		<select id="sourceEntities">
+			<option value="gate">Gate</option>
+			<option value="landmark">Land mark</option>
+			<option value="dropzone">Drop zone</option>
+			<option value="item">Star</option>
+			<option value="bonus">Bonus Item</option>
+		</select> <input type="button" value="add" id="addEntityButton"><br>
+
+		<div id="playerCoords"></div>
+		<select id="entityList" size="10" style="width:400px;"></select>
+
+		<hr>
+
+		<div id="selectedEntity"></div>
+
+		Altitude: <input type="number" id="editor-altitude" min="0" max="4200" size="10" step="2" value="2000">
+		Angle: <input type="number" id="editor-angle" size="10" step="1" value="0">
+		<input type="button" value="Align to Player" id="editor-alignplayer">
+	</div>
+
+
+
+	<hr style="clear:both;">
+	<div id="touch-controls">
+
+		Course:	<select id="chooseLevel"></select>
+		<div id="debugControls"><div id="controlValueIndicator"></div></div>
+
+		Map Style: <select id="mapType"></select>
+		
+		<input type="button" id="centerOnPlayer" value="Center On Player">
+		<input type="button" id="pauseButton" value="Pause">
+		<input type="button" id="disableGravity" value="Disable Gravity">
+		<input type="button" id="resetButton" value="Reset Game">
+		<input type="button" id="idleButton" value="Set Idle">
+		
+		<hr>
+
+		<input type="button" id="resetGalaxyButton" value="Reset System">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" id="increaseViewOffset" value="Increase Offset"> <input type="button" id="decreaseViewOffset" value="Decrease Offset">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" id="gotoWin" value="Skip to Win">
+		<input type="button" id="gotoLoose" value="Skip to Loose">
+		<input type="button" id="hideHUD" value="Hide HUD">
+
+		<hr>
+
+		<input type="range" id="altitude" min="0" max="4000" style="width:800px">
+	</div>
+	<!-- <canvas width="800" height="600" id="debugCanvas"></canvas> -->
+</body>
+
+</html>

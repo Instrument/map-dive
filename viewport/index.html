@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script src="../common/js/global_config.js"></script>
+	<script src="../common/js/globals.js"></script>
+	<script>
+	/*
+	// route console.log to a visibile container in the page, helpful for troubleshooting startup issues on machines without keyboard/mouse.
+	window.console.log = function(msg) {
+		if(!engineRunning){
+        	$("#init_log").append("<div>" + msg + "</div>");
+    	}
+    }
+    */	
+	</script>
+	
+	<script type="x-shader/x-vertex" id="vertexShader">
+
+		varying vec3 vWorldPosition;
+
+		void main() {
+
+			vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+			vWorldPosition = worldPosition.xyz;
+
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+		}
+
+	</script>
+
+	<script type="x-shader/x-fragment" id="fragmentShader">
+
+		uniform vec3 topColor;
+		uniform vec3 bottomColor;
+		uniform float offset;
+		uniform float exponent;
+
+		varying vec3 vWorldPosition;
+
+		void main() {
+
+			float h = max( 0.0, vWorldPosition.y / 5000.0);
+			gl_FragColor = vec4( mix( bottomColor, topColor, h), 1.0 );
+
+		}
+
+	</script>
+	
+	<script src="../common/js/three.min.js"></script>
+	<script src="../common/js/OBJLoader.js"></script>
+	<script src="../common/js/CSS3DRenderer.js"></script>
+	<script src="../common/js/easing/Easing.js"></script>
+	
+	<script type="text/javascript" src="../common/js/jquery.js"></script>
+	<script type="text/javascript" src="jquery.easing.js"></script>
+
+	<script type="text/javascript" src="../common/js/jquery.animate-colors-min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.8&sensor=false"></script>
+	
+	<script src="../common/js/map_style.js"></script>
+	<script src="../common/js/landmarks.js"></script>
+
+	
+	<script src="../common/levels/level.test.js"></script>
+	<script src="../common/levels/moscone_center.json"></script>
+	<script src="../common/levels/corcovado.json"></script>
+	<script src="../common/levels/viking_ship.json"></script>
+	<script src="../common/levels/st_basils.json"></script>
+	<script src="../common/levels/taj mahal.json"></script>
+	<script src="../common/levels/eiffel tower.json"></script>
+	<script src="../common/levels/burj al arab.json"></script>
+	<script src="../common/levels/pyramids.json"></script>
+	<script src="../common/levels/mt killimanjaro.json"></script>
+	<script src="../common/levels/sydney opera house.json"></script>
+	<script src="../common/levels/hobbiton.json"></script>
+	<script src="../common/levels/statue of liberty.json"></script>
+	<script src="../common/levels/burning man.json"></script>
+
+	<script src="../common/seedrandom.js"></script>
+
+	
+	<script src="counter.js" type="text/javascript"></script>
+	<script src="viewport.js" type="text/javascript"></script>
+
+	<script src="../common/js/entity.js"></script>
+	<script src="../common/js/player.js"></script>
+	<script src="../common/js/mapmanager.css.js"></script>
+	<script src="../common/js/assetmanager.js"></script>
+
+	<script src="minimap.hud.js"></script>
+	<script src="mapinfo.hud.js"></script>
+	<script src="player.hud.js"></script>
+	<script src="copyright.hud.js"></script>
+	<script src="logo.hud.js"></script>
+	<script src="search.hud.js"></script>
+	<script src="helptext.hud.js"></script>
+	<script src="instructions.hud.js"></script>
+
+	<style>
+
+		@font-face
+		{
+			font-family: openSans;
+			src: url('../common/opensans/OpenSans-Regular.ttf');
+		}
+
+		@font-face
+		{
+			font-family: openSans-Light;
+			src: url('../common/opensans/OpenSans-Light.ttf');
+		}
+
+		@font-face
+		{
+			font-family: openSans-Bold;
+			src: url('../common/opensans/OpenSans-Bold.ttf');
+		}
+
+		html,
+		body{
+			overflow:hidden;
+		}
+
+		b {
+			font-weight:normal;
+			font-family: openSans-Bold;
+		}
+
+		#debug {
+			position:absolute;
+			z-index:10000;
+		}
+
+		#webgl-viewport {
+			z-index:2000;
+			position:absolute;
+			top:0px;
+			left:0px;
+		}
+
+		#map-container {
+			position:absolute;
+			z-index:100;
+			width: 2048px;
+			height: 2048px;
+			overflow:hidden;
+		}
+
+		#hud-instructions{
+			display:none;
+			position:absolute;
+			top:108px;
+			left:76px;
+			width:927px;
+			height:559px;
+			background-image:url( images/instructions.png );
+			background-repeat:no-repeat;
+			z-index:4000;
+		}
+
+		#test-container IMG {
+			position:absolute;
+		}
+
+		#css-viewport {
+			z-index:1000;
+			position:absolute;
+			top:0px;
+			left:0px;
+			overflow:hidden;
+		}
+
+		#hud-viewport {
+			height:100%;
+			z-index:3000;
+			display:none;
+			position:absolute;
+			top:0px;
+			left:0px;
+		}
+
+		#hud-viewport canvas {
+			position:absolute;
+			z-index:4100;
+		}
+
+		#hud-intro {
+			display:none;
+			position:absolute;
+			bottom:145px;
+			left:365px;
+			width:350px;
+			height:350px;
+		}
+
+		#help-text-hud {
+			text-align:center;
+			top:450px;
+			width:1080px;
+			position:absolute;
+			z-index:3000;
+			font-family: openSans-Light;
+			font-size: 65px;
+			color:#ffffff;
+			text-shadow: 0px 2px 10px rgba(0,0,0,0.35);
+		}
+
+		#hud-score {
+			width:955px;
+			height:130px;
+			position:absolute;
+			bottom:250px;
+			overflow:hidden;
+			background-image:url(images/ui_hud_peghead_shadow.png);
+			background-color:white;
+			background-repeat:no-repeat;
+			background-position:center center;
+		}
+
+		.hud-box {
+			background-color:rgba(255,255,255,0.95);
+			box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+			border-radius: 4px;
+			position:absolute;
+			z-index:4000;
+			width:955px;
+			left: 62px;
+			font-family: openSans-Light;
+			font-size: 35px;
+			color:#000000;
+		}
+
+		.hud-row {
+			margin: 50px;
+			height:47px;
+		}
+
+		.hud-row-inner {
+			margin:50px;
+			margin-top:15px;
+			margin-bottom:15px;
+		}
+
+		.hud-row-first {
+			margin:50px;
+			margin-top:50px;
+			margin-bottom:15px;
+		}
+
+		.hud-row-last {
+			margin:50px;
+			margin-top:15px;
+			margin-bottom:50px;
+		}
+
+		#mini-map-container {
+			display:none;
+			position:absolute;
+			width:955px;
+			height:580px;
+			top:62px;
+			left:62px;
+		}
+
+		#mini-map {
+			position:absolute;
+			top:20px;
+			left:20px;
+			width:915px;
+			height:540px;
+		}
+
+		.mini-map-shadow {
+			position:absolute;
+			top:20px;
+			left:20px;
+			width:915px;
+			height:540px;
+			box-shadow: inset 0px 0px 18px rgba(0,0,0,0.4);
+		}
+
+		#minimap-icon {
+			position:absolute;
+			top:243px;
+			left:460px;
+			z-index:10100;
+			width:35px;
+			height:60px;
+			overflow:hidden;
+			background-image:url(images/pegman_mini.png);
+			background-position:0px 0px;
+			background-repeat:no-repeat;
+		}
+
+		#minimap-icon.left{
+			background-position:0px -60px;	
+		}
+
+		#search-icon {
+			position:absolute;
+			right:0px;
+			top:0px;
+			width:235px;
+			height:100%;
+			background-image:url(images/magnify_icon.png);
+			background-repeat:no-repeat;
+			background-position: center center;
+		}
+
+		#directions-icon {
+			position:absolute;
+			right:0px;
+			top:0px;
+			width:235px;
+			height:100%;
+			background-color:rgba(255,255,255,0.8);
+
+			background-image:url(images/directions_icon.png);
+			background-repeat:no-repeat;
+			background-position: center center;
+		}
+
+
+		#mapinfo-search {
+			/*background-color:rgba(247,247,247,0.8);*/
+			display:none;
+			top:85px;
+			/*background-image:url(images/magnify_icon.png);
+			background-repeat:no-repeat;
+			background-position: 860px center;*/
+		}
+
+
+		#mapinfo-target {
+			display:none;
+			top:240px;
+		}
+
+		#mapinfo-location {
+			display:none;
+			top:519px;
+		}
+
+		#mapinfo-copyright {
+			display:none;
+			position:absolute;
+			right:0px;
+			bottom:0px;
+			z-index:5000;
+
+			padding:8px;
+			font-family:openSans-Light;
+			background-color:rgba(255,255,255,0.6);
+		}
+
+		#mapinfo-logo {
+			display:none;
+			position:absolute;
+			left:55px;
+			bottom:65px;
+			width:126px;
+			height:43px;
+			z-index:5000;
+			background-image: url(images/google_logo.png);
+		}
+
+		#mapinfo-position{
+			
+		}
+
+		#mapinfo-altitude {
+			float:right;
+			text-align:right;
+			margin-right:50px;
+			margin-top:50px;
+			margin-bottom:50px;
+		}
+
+		#HUD .hud-group {
+			z-index:4000;
+		}
+
+		#mapinfo-target-name{
+			font-family:openSans-Bold;
+		}
+
+		#distance-counter{
+			margin-left:136px;
+			margin-top:40px;
+		}
+
+		#distance-container {
+			background-image:url(images/ui_hud_gate.png);
+			position:absolute;
+			background-repeat:no-repeat;
+			background-position: left center;
+			left:0px;
+			height:130px;
+		}
+
+		#score-counter{
+			margin-right:140px;
+			margin-top:40px;
+		}
+
+		#score-container {
+			background-image:url(images/ui_hud_star.png);
+			position:absolute;
+			background-repeat:no-repeat;
+			background-position: right center;
+			right:0px;
+			height:130px;
+		}
+
+		HTML * {
+		  -webkit-transition: none !important;
+		  -moz-transition: none !important;
+		  -o-transition: none !important;
+		  -ms-transition: none !important;
+		  transition: none !important;
+		}
+
+
+		#init_log {
+			top:0px;
+			left:0px;
+			width:100%;
+			height:100%;
+			position:absolute;
+			z-index:100000;
+			font-size:12px;
+		}
+
+		#hud-about{
+			position:absolute;
+			bottom:100px;
+			padding-top:12px;
+			background-color:white;
+		}
+
+    /*Counter
+    ------------------------------------------------------------------------------------------*/
+    .counter { position: relative; }
+
+    .counter ul {
+    z-index:4000;
+      overflow: hidden;
+      padding:0px;
+      margin:0px;
+      padding-bottom:4px;
+      padding-left:4px;
+    }
+
+    .counter ul li {
+      text-align: center;
+      font-family:'openSans-Light';
+      background-color: #fff;
+      display: inline-block;
+      position: relative;
+      color: #404040;
+      zoom: 1;
+      *display:inline;
+      box-shadow:2px 2px 2px rgba(0,0,0,0.1)
+    }
+
+    .counter ul li div {
+      background-color: #ffffff;
+      position: absolute;
+      width: 100%;
+      top: 0px;
+    }
+      .ie7 .counter ul li div { margin-left: -24px; }
+    .counter ul li div.top {
+      z-index: 4014;
+      height: 50%;
+      overflow: hidden;
+      border-bottom: 2px solid #ecf0f3;
+    }
+    .counter ul li div.bottom { 
+      z-index: 4011;
+      background-color: #ffffff;
+    }
+    .counter ul li div.flip-top { 
+      z-index: 4012;
+      height: 50%;
+      overflow: hidden;
+    }
+    .counter ul li div.flip-bottom { 
+      z-index: 4010; 
+      background: #ffffff;
+    }
+
+    .counter ul li div.shim {
+      z-index: 4010; 
+      background-color: #e8e8e8;
+      height: 50%;
+    }
+
+    .counter ul li.hundreds {
+    	margin-right:15px;
+    }
+
+    .counter ul li.tens {
+    	margin-left:15px;
+    }
+
+    .counter ul {
+    	background-image: url(images/ui_hud_divider.png);
+    	background-repeat:no-repeat;
+    	background-position:107px -25px;
+    }
+
+    .big-counter { }
+
+    .big-counter h2 { text-align: center; }
+    .big-counter ul {
+      width: 100%;
+      height: 50px;
+
+    }
+
+    .big-counter ul li {
+      width: 45px;
+      height: 50px;
+      margin-left: 0px;
+      font-size: 40px;
+      line-height: 50px;
+      margin-right:2px;
+      margin-left:2px;
+    }
+
+    .big-counter ul li div {
+      height: 50px;
+    }
+    .ie7 .big-counter ul li div { margin-left: -72px; }
+    .big-counter ul li div.top { }
+
+    /*end Counter
+    ------------------------------------------------------------------------------------------*/
+
+
+
+	</style>
+</head>
+
+<body>
+	<div id="init_log"></div>
+
+	<div id="debug"></div>
+	
+	<div id="HUD">
+
+		<div id="hud-instructions" data-active="false"></div>
+
+		<div id="mapinfo-logo" data-active="false"></div>
+
+		<div id="hud-about"  class="hud-box hud-group" data-active="false"><img src="images/about-right.jpg"></div> 
+
+		<div id="mini-map-container" class="hud-box hud-group" data-active="false">
+			<div id="mini-map"></div>
+			<div id="minimap-icon"></div>
+			<div class="mini-map-shadow"></div>
+		</div>
+
+		<div id="mapinfo-search" class="hud-box hud-group" data-active="false">
+			<div class="hud-row"><span id="mapinfo-search-term"></span></div>
+			<div id="search-icon"></div>
+		</div>
+
+		<div id="help-text-hud" data-active="false"><img src="images/ui_wave_to_play.png"></div>
+
+		<div id="title-letter-hud" data-active="false"><img id="title-letter"></div>
+
+		<div id="mapinfo-copyright" class=""data-active="false">
+			<div id="map-info-copytext"></div>
+		</div>
+
+		<div id="mapinfo-target" class="hud-box hud-group" data-active="false">
+			<div class="hud-row-first" id="mapinfo-target-name"></div>
+			<div class="hud-row-inner" id="mapinfo-target-address"></div>
+			<div class="hud-row-last" id="mapinfo-target-country"></div>
+			<div id="directions-icon"></div>
+		</div>
+
+		<div id="mapinfo-location" class="hud-box hud-group" data-active="false">
+			<div id="mapinfo-altitude">000,000 ft</div>
+			<div id="mapinfo-position" class="hud-row"><b>Dive</b>&nbsp;&nbsp;&nbsp;<span id="mapinfo-latlng"></span></div>
+		</div>
+
+		<div id="hud-viewport" data-active="false">
+			<img src="" id="hud-testing">
+			<canvas id="hud-intro" width="350" height="350"></canvas>
+			<div id="hud-score" class="hud-box hud-group">
+				
+				<div id="score-container">
+			        <!-- point counter -->
+			        <div id="score-counter" class="big-counter counter clearfix">
+			          <ul>
+						<li class="thousands">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+						</li><li class="hundreds">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+			              </li><li class="tens">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+						</li><li class="ones">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+			              </li>
+			          </ul>
+			        </div>
+			        <!-- end point counter -->
+			    </div>
+				
+				<div id="distance-container">
+					<!-- distance counter -->
+			        <div id="distance-counter" class="big-counter counter clearfix">
+			          <ul>
+			             <li class="thousands">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+			              </li><li class="hundreds">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+			              </li><li class="tens">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+			              </li><li class="ones">
+			                  <div class="top"></div>
+			                  <div class="bottom"></div>
+			                  <div class="flip-top"></div>
+			                  <div class="flip-bottom"></div>
+			                  <div class="shim"></div>
+			              </li>
+			          </ul>
+			        </div>
+			        <!-- end distance counter -->
+		       	</div>
+			</div>
+		</div>
+
+	<!-- END HUD CONTENT -->
+	</div>
+
+	<div id="css-viewport"></div>
+    <div id="webgl-viewport"></div>
+    <div id="map-container"></div>
+ 
+    
+</body>
+
+</html>
