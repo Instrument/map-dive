@@ -1,7 +1,10 @@
 map-dive
 ========
 
-Map-Diving game for Google I/O 2013
+[Instrument](http://weareinstrument.com "Instrument") created the Map Dive installation for the Google Maps sandbox at I/O 2013. It uses multiple instances of Chrome mashed up with the Google Maps Javascript API v3, Web GL, 3D CSS, web sockets and node.js, as well as an Asus Xtion PRO for motion tracking.
+
+The game lets users navigate Pegman (the Streetview icon) through a series of gates while free falling to famous monuments around the globe.
+
 
 [Application Architecture](https://github.com/Instrument/map-dive/blob/master/docs/architecture.md "Architecture") | [Using the Editor](https://github.com/Instrument/map-dive/blob/master/docs/editor.md "Dive Editor")
 
@@ -58,7 +61,7 @@ After boot, all nodes should start a fullscreen instance of Google Chrome runnin
 
 ### Viewport Nodes
 
-Viewports should all load chrome in full screen, and point to the viewport URL with the viewOffset value set to the correct index.  The center viewport is index zero.  For example, these three URLs are for the left, center, and right viewports.
+Viewports should all load Chrome in full screen, and point to the viewport URL with the viewOffset value set to the correct index.  The center viewport is index zero.  For example, these three URLs are for the left, center, and right viewports.
 
 	[server url]/viewport/index.html#viewOffset=1
 	[server url]/viewport/index.html#viewOffset=0
