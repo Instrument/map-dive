@@ -3,6 +3,10 @@
 
 <head>
 	
+	<!-- Interface Utils -->
+	<script type="text/javascript" src="util.js"></script>
+
+	<!-- App/API JS -->
 	<script src="../common/js/global_config.js"></script>
 	<script src="../common/js/globals.js"></script>
 	<script src="../common/js/easing/Easing.js"></script>
@@ -150,6 +154,34 @@
 			text-align:right;
 		}
 
+		#relauncher-box {
+			padding: 4px;
+			position: absolute;
+			left: 8px;
+			bottom: 40px;
+			background-color: rgba(0,0,0,0.4);
+			-webkit-border-radius: 5px;
+		}
+		#relauncher-list {
+			margin: 0px;
+			padding: 0px;
+		}
+		#relauncher-list>li {
+			background-color: #888888;
+			border: 1px solid gray;
+			color: #150517;
+			cursor: hand;
+			cursor: pointer;
+			display: inline-block;
+			font-size: 1em;
+			margin: 8px;
+			padding: 6px;
+			text-align: center;
+			vertical-align: middle;
+			width: 160px;
+			-webkit-border-radius: 5px;
+		}
+
 	</style>
 </head>
 
@@ -236,6 +268,13 @@
 		<input type="range" id="altitude" min="0" max="4000" style="width:800px">
 	</div>
 	<!-- <canvas width="800" height="600" id="debugCanvas"></canvas> -->
+	<!-- Liquid Galaxy buttons -->
+	<div id="relauncher-box">
+		<ul id="relauncher-list">
+			<li onclick="relaunchTo('earth');">Google Earth</li>
+			<li onclick="relaunchTo('peruse');">Street View</li>
+		</ul>
+	</div>
 </body>
 
 </html>
