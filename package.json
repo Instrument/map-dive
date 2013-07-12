@@ -7,6 +7,7 @@
     "url": "https://github.com/Instrument/map-dive.git"
   },
   "dependencies" : {
-    "socket.io": "0.9.x"
+    "socket.io": "0.9.x",
+    "commander": "1.x.x"
   }
 }
