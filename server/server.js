@@ -6,7 +6,7 @@ var app = require('http').createServer(handler),
   qs = require('querystring');
 
 pg
-  .option( '-p, --port [port]', 'Listen port [8800]', '8086' )
+  .option( '-p, --port [port]', 'Listen port [8800]', '8800' )
   .option( '-u, --udp  [port]', 'UDP port [12345]', '12345' )
   .parse( process.argv );
 
