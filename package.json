@@ -1,0 +1,13 @@
+{
+  "name": "map-dive",
+  "preferGlobal": false,
+  "main": "server/server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Instrument/map-dive.git"
+  },
+  "dependencies" : {
+    "socket.io": "0.9.x",
+    "commander": "1.x.x"
+  }
+}

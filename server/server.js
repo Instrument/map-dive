@@ -1,10 +1,17 @@
 var app = require('http').createServer(handler),
-	io = require('socket.io').listen(app),
-  fs = require('fs'),
   dgram = require("dgram"),
+  fs = require('fs'),
+  io = require('socket.io').listen(app),
+  pg = require('commander'),
   qs = require('querystring');
 
+pg
+  .option( '-p, --port [port]', 'Listen port [8800]', '8086' )
+  .option( '-u, --udp  [port]', 'UDP port [12345]', '12345' )
+  .parse( process.argv );
 
+var listenPort = Number(pg.port);
+var udpPort = Number(pg.udp);
 
 // Used by the level editor, writes a bunch of json into a file.
 function saveLevel(name, json, _cb){
@@ -23,7 +30,7 @@ app.on("listening", function () {
 	var address = app.address();
 	console.log("TCP server listening for displays on " + address.address + ":" + address.port);
 });
-app.listen(8800);
+app.listen(listenPort);
 
 
 // Handler for HTTP requests.
@@ -137,4 +144,4 @@ UDPserver.on("listening", function () {
 	console.log("UDP server listening for user_tracker on " + address.address + ":" + address.port);
 });
 
-UDPserver.bind(12345);
+UDPserver.bind(udpPort);
